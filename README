@@ -1,0 +1,52 @@
+== About ==
+
+transpress is a fast, multi-process compression format converter.
+It converts a directory of raw/gz/bz2 files into bz2/raw/gz files.
+
+Different compression formats have different time/space characteristics,
+and it's sometimes desirable to convert large datasets to a different format
+that's more optimal for what you're planning to do. For instance,
+bzip2's decode is often much slower than the disk; it can be better to
+use gzip or lzma in that case.
+
+Of course, you can convert with a simple UNIX pipe such as:
+
+    bzip2 -dc foo.bz2 | gzip >foo.gz
+
+And on a multicore system, the kernel will schedule
+bzip2 and gzip on different cores, providing some paralliem.
+But because the decompressor is faster than compressor,
+one core will be partially idle. That's inefficient.
+
+So, transpress runs the compression and decompression on the same core,
+and gets parallelism out of processing different files on different cores.
+This provides 100% CPU utilization on all cores, and
+is usually substantially faster than the pipe approach.
+
+Of course, you could still do this with a shell script
+that runs multiple pipes, but IMO it's nicer to just do
+it in C.
+
+== Compiling ==
+
+    apt-get install libbz2-dev zlib1g-dev liblzma-dev
+    make
+    cp transpress /usr/local/bin
+
+== Usage ==
+
+    transpress [dir] [infmt] [outfmt]
+
+    Ex: transpress /home/user/data gz bz2
+    Ex: transpress /home/user/data bz2 json
+        (unknown fmts will be treated as raw binary data)
+
+== Bugs ==
+
+1. Cannot handle files w/ no file extension.
+2. Should support lzma + lzop.
+3. Some processes can finish earlier than others.
+4. Cannot control compression level via the cmd line.
+5. No manpages/help/etc.
+6. Can't handle infmt==outfmt (i.e. to change compression level)
+
