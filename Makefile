@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-Wall -O2 -g -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE
 
-LIBS=-lbz2 -lz
+LIBS=-lbz2 -lz -llzma
 PROG=transpress
 SRCS=main.c
 OBJS=$(SRCS:.c=.o)
