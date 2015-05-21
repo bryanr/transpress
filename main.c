@@ -172,7 +172,7 @@ static int file_load(char *fn_in, char *infmt, char *outfmt)
     char buf_in[BUFLEN], buf_out[BUFLEN];
     FILE *fp_in, *fp_out;
     BZFILE *bzf_in, *bzf_out;
-    gzFile *gzf_in, *gzf_out;
+    gzFile gzf_in, gzf_out;
     lzma_stream lzma_str = LZMA_STREAM_INIT;
 	struct timeval tv_start, tv_stop;
     int ret, err, fmt_in, fmt_out, sl, buf_in_pos, buf_in_len, buf_out_len;
